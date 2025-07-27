@@ -173,6 +173,12 @@ GameHub/
 - Placeholder directory `/tests` exists for future expansion.
 
 ---
+## Images
+<img width="1366" height="689" alt="2" src="https://github.com/user-attachments/assets/2276692a-de7d-4695-a351-6dd40f6293ac" />
+<img width="1366" height="687" alt="4" src="https://github.com/user-attachments/assets/9462ddad-ff03-4c0f-a3b3-f7e6ca04cf43" />
+<img width="1366" height="688" alt="3" src="https://github.com/user-attachments/assets/f8741907-d33e-4317-a067-b368c95f31dc" />
+<img width="1366" height="694" alt="1" src="https://github.com/user-attachments/assets/855f45a8-4f18-41f7-add2-cdd4814e48c3" />
+
 
 ## 🌐 Deployment
 
