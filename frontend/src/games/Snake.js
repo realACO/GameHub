@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
+<<<<<<< HEAD
+import { RotateCcw, Trophy, Zap } from "lucide-react";
+import "./Snake.css";
+=======
 import {
   RotateCcw,
   Trophy,
@@ -8,6 +12,7 @@ import {
   ArrowLeft,
   ArrowRight,
 } from "lucide-react";
+>>>>>>> 5ba5d7a24af347ce938db3c693acb141f5a12858
 
 const GRID_SIZE = 20;
 const INITIAL_SNAKE = [{ x: 10, y: 10 }];
@@ -99,6 +104,25 @@ const Snake = () => {
 
   useEffect(() => {
     const handleKeyPress = (e) => {
+<<<<<<< HEAD
+      const key = e.key.toLowerCase();
+
+      if (gameStatus === "paused") {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          startGame();
+          return;
+        }
+
+        if (["w", "a", "s", "d"].includes(key)) {
+          e.preventDefault();
+
+          if (key === "w") setDirection({ x: 0, y: -1 });
+          if (key === "s") setDirection({ x: 0, y: 1 });
+          if (key === "a") setDirection({ x: -1, y: 0 });
+          if (key === "d") setDirection({ x: 1, y: 0 });
+
+=======
       const blockedKeys = [
         "ArrowUp",
         "ArrowDown",
@@ -121,10 +145,31 @@ const Snake = () => {
 
       if (gameStatus === "paused") {
         if (e.key === "Enter" || e.code === "NumpadEnter") {
+>>>>>>> 5ba5d7a24af347ce938db3c693acb141f5a12858
           startGame();
           return;
         }
       }
+<<<<<<< HEAD
+
+      if (gameStatus !== "playing") return;
+
+      switch (key) {
+        case "w":
+          e.preventDefault();
+          if (direction.y === 0) setDirection({ x: 0, y: -1 });
+          break;
+        case "s":
+          e.preventDefault();
+          if (direction.y === 0) setDirection({ x: 0, y: 1 });
+          break;
+        case "a":
+          e.preventDefault();
+          if (direction.x === 0) setDirection({ x: -1, y: 0 });
+          break;
+        case "d":
+          e.preventDefault();
+=======
 
       if (gameStatus !== "playing") return;
 
@@ -139,6 +184,7 @@ const Snake = () => {
           if (direction.x === 0) setDirection({ x: -1, y: 0 });
           break;
         case "ArrowRight":
+>>>>>>> 5ba5d7a24af347ce938db3c693acb141f5a12858
           if (direction.x === 0) setDirection({ x: 1, y: 0 });
           break;
         default:
@@ -146,10 +192,15 @@ const Snake = () => {
       }
     };
 
+<<<<<<< HEAD
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+=======
     const listenerOptions = { capture: true, passive: false };
     window.addEventListener("keydown", handleKeyPress, listenerOptions);
     return () =>
       window.removeEventListener("keydown", handleKeyPress, listenerOptions);
+>>>>>>> 5ba5d7a24af347ce938db3c693acb141f5a12858
   }, [direction, gameStatus]);
 
   const getCellContent = (x, y) => {
@@ -213,7 +264,11 @@ const Snake = () => {
         {gameStatus === "paused" && (
           <div className="text-center mb-8">
             <div className="bg-blue-500 text-white px-6 py-3 rounded-full font-bold text-lg inline-block">
+<<<<<<< HEAD
+              Press Enter or W/A/S/D to Start
+=======
               Press ENTER to Start
+>>>>>>> 5ba5d7a24af347ce938db3c693acb141f5a12858
             </div>
           </div>
         )}
@@ -230,6 +285,9 @@ const Snake = () => {
         {/* Game Grid */}
         <div className="flex justify-center mb-8">
           <div className="bg-gray-900 p-4 rounded-2xl shadow-2xl">
+<<<<<<< HEAD
+            <div className="grid gap-px bg-gray-700 snake-grid">
+=======
             <div
               className="grid gap-px bg-gray-700"
               style={{
@@ -238,6 +296,7 @@ const Snake = () => {
                 height: "400px",
               }}
             >
+>>>>>>> 5ba5d7a24af347ce938db3c693acb141f5a12858
               {Array.from({ length: GRID_SIZE * GRID_SIZE }).map((_, index) => {
                 const x = index % GRID_SIZE;
                 const y = Math.floor(index / GRID_SIZE);
@@ -263,21 +322,21 @@ const Snake = () => {
             <div className="grid grid-cols-3 gap-2 max-w-48 mx-auto">
               <div></div>
               <button className="p-3 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
-                <ArrowUp className="h-4 w-4 mx-auto" />
+                <span className="font-bold">W</span>
               </button>
               <div></div>
               <button className="p-3 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
-                <ArrowLeft className="h-4 w-4 mx-auto" />
+                <span className="font-bold">A</span>
               </button>
               <button className="p-3 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
-                <ArrowDown className="h-4 w-4 mx-auto" />
+                <span className="font-bold">S</span>
               </button>
               <button className="p-3 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
-                <ArrowRight className="h-4 w-4 mx-auto" />
+                <span className="font-bold">D</span>
               </button>
             </div>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
-              Use arrow keys to control the snake
+              Use W/A/S/D keys to control the snake
             </p>
           </div>
         </div>

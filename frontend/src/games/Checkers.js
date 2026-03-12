@@ -71,8 +71,15 @@ const Checkers = () => {
         if (!isValidSquare(newRow, newCol)) continue;
 
         if (!boardState[newRow][newCol]) {
+<<<<<<< HEAD
+          // Regular move to empty square
           moves.push({ row: newRow, col: newCol, type: "move" });
         } else if (boardState[newRow][newCol].color !== piece.color) {
+          // Potential capture
+=======
+          moves.push({ row: newRow, col: newCol, type: "move" });
+        } else if (boardState[newRow][newCol].color !== piece.color) {
+>>>>>>> 5ba5d7a24af347ce938db3c693acb141f5a12858
           const jumpRow = newRow + dRow;
           const jumpCol = newCol + dCol;
 
@@ -128,9 +135,13 @@ const Checkers = () => {
     capturedRow = null,
     capturedCol = null,
   ) => {
+<<<<<<< HEAD
+    const newBoard = board.map((row) => [...row]);
+=======
     const newBoard = board.map((row) =>
       row.map((cell) => (cell ? { ...cell } : null)),
     );
+>>>>>>> 5ba5d7a24af347ce938db3c693acb141f5a12858
     const piece = newBoard[fromRow][fromCol];
 
     // Move piece
@@ -173,7 +184,11 @@ const Checkers = () => {
     } else {
       // End turn
       setSelectedSquare(null);
+<<<<<<< HEAD
+      setCurrentPlayer((prev) => (prev === "red" ? "black" : "red"));
+=======
       setCurrentPlayer(currentPlayer === "red" ? "black" : "red");
+>>>>>>> 5ba5d7a24af347ce938db3c693acb141f5a12858
       setMustCapture(false);
 
       // Check for win conditions
