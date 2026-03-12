@@ -1,32 +1,37 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Bomb, Flag, RotateCcw, Trophy, Clock, Zap } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from "react";
+import { Bomb, Flag, RotateCcw, Trophy, Clock, Zap } from "lucide-react";
+import "./Minesweeper.css";
 
 const GRID_SIZE = 10;
 const MINE_COUNT = 15;
 
 const Minesweeper = () => {
   const [grid, setGrid] = useState([]);
-  const [gameStatus, setGameStatus] = useState('playing'); // playing, won, lost
+  const [gameStatus, setGameStatus] = useState("playing"); // playing, won, lost
   const [flagCount, setFlagCount] = useState(MINE_COUNT);
   const [time, setTime] = useState(0);
   const [timerActive, setTimerActive] = useState(false);
 
   const initializeGrid = useCallback(() => {
-    const newGrid = Array(GRID_SIZE).fill().map(() =>
-      Array(GRID_SIZE).fill().map(() => ({
-        isMine: false,
-        isRevealed: false,
-        isFlagged: false,
-        neighborMines: 0
-      }))
-    );
+    const newGrid = Array(GRID_SIZE)
+      .fill()
+      .map(() =>
+        Array(GRID_SIZE)
+          .fill()
+          .map(() => ({
+            isMine: false,
+            isRevealed: false,
+            isFlagged: false,
+            neighborMines: 0,
+          })),
+      );
 
     // Place mines randomly
     let minesPlaced = 0;
     while (minesPlaced < MINE_COUNT) {
       const row = Math.floor(Math.random() * GRID_SIZE);
       const col = Math.floor(Math.random() * GRID_SIZE);
-      
+
       if (!newGrid[row][col].isMine) {
         newGrid[row][col].isMine = true;
         minesPlaced++;
@@ -43,8 +48,10 @@ const Minesweeper = () => {
               const newRow = row + i;
               const newCol = col + j;
               if (
-                newRow >= 0 && newRow < GRID_SIZE &&
-                newCol >= 0 && newCol < GRID_SIZE &&
+                newRow >= 0 &&
+                newRow < GRID_SIZE &&
+                newCol >= 0 &&
+                newCol < GRID_SIZE &&
                 newGrid[newRow][newCol].isMine
               ) {
                 count++;
@@ -61,7 +68,7 @@ const Minesweeper = () => {
 
   const resetGame = () => {
     setGrid(initializeGrid());
-    setGameStatus('playing');
+    setGameStatus("playing");
     setFlagCount(MINE_COUNT);
     setTime(0);
     setTimerActive(false);
@@ -73,16 +80,20 @@ const Minesweeper = () => {
 
   useEffect(() => {
     let interval;
-    if (timerActive && gameStatus === 'playing') {
+    if (timerActive && gameStatus === "playing") {
       interval = setInterval(() => {
-        setTime(time => time + 1);
+        setTime((time) => time + 1);
       }, 1000);
     }
     return () => clearInterval(interval);
   }, [timerActive, gameStatus]);
 
   const revealCell = (row, col) => {
-    if (gameStatus !== 'playing' || grid[row][col].isRevealed || grid[row][col].isFlagged) {
+    if (
+      gameStatus !== "playing" ||
+      grid[row][col].isRevealed ||
+      grid[row][col].isFlagged
+    ) {
       return;
     }
 
@@ -91,7 +102,7 @@ const Minesweeper = () => {
     }
 
     const newGrid = [...grid];
-    
+
     if (newGrid[row][col].isMine) {
       // Game over - reveal all mines
       for (let r = 0; r < GRID_SIZE; r++) {
@@ -101,7 +112,7 @@ const Minesweeper = () => {
           }
         }
       }
-      setGameStatus('lost');
+      setGameStatus("lost");
       setTimerActive(false);
     } else {
       // Reveal cells using flood fill
@@ -111,13 +122,15 @@ const Minesweeper = () => {
       while (queue.length > 0) {
         const [currentRow, currentCol] = queue.shift();
         const key = `${currentRow}-${currentCol}`;
-        
+
         if (visited.has(key)) continue;
         visited.add(key);
 
         if (
-          currentRow < 0 || currentRow >= GRID_SIZE ||
-          currentCol < 0 || currentCol >= GRID_SIZE ||
+          currentRow < 0 ||
+          currentRow >= GRID_SIZE ||
+          currentCol < 0 ||
+          currentCol >= GRID_SIZE ||
           newGrid[currentRow][currentCol].isRevealed ||
           newGrid[currentRow][currentCol].isFlagged ||
           newGrid[currentRow][currentCol].isMine
@@ -147,7 +160,7 @@ const Minesweeper = () => {
       }
 
       if (revealedCount === GRID_SIZE * GRID_SIZE - MINE_COUNT) {
-        setGameStatus('won');
+        setGameStatus("won");
         setTimerActive(false);
       }
     }
@@ -157,15 +170,15 @@ const Minesweeper = () => {
 
   const toggleFlag = (e, row, col) => {
     e.preventDefault();
-    
-    if (gameStatus !== 'playing' || grid[row][col].isRevealed) {
+
+    if (gameStatus !== "playing" || grid[row][col].isRevealed) {
       return;
     }
 
     const newGrid = [...grid];
     newGrid[row][col].isFlagged = !newGrid[row][col].isFlagged;
-    
-    setFlagCount(prev => newGrid[row][col].isFlagged ? prev - 1 : prev + 1);
+
+    setFlagCount((prev) => (newGrid[row][col].isFlagged ? prev - 1 : prev + 1));
     setGrid(newGrid);
   };
 
@@ -173,37 +186,48 @@ const Minesweeper = () => {
     if (cell.isFlagged) {
       return <Flag className="h-4 w-4 text-red-500" />;
     }
-    
+
     if (!cell.isRevealed) {
       return null;
     }
-    
+
     if (cell.isMine) {
       return <Bomb className="h-4 w-4 text-red-600" />;
     }
-    
+
     if (cell.neighborMines > 0) {
       return (
-        <span className={`font-bold text-sm ${
-          cell.neighborMines === 1 ? 'text-blue-600' :
-          cell.neighborMines === 2 ? 'text-green-600' :
-          cell.neighborMines === 3 ? 'text-red-600' :
-          cell.neighborMines === 4 ? 'text-purple-600' :
-          cell.neighborMines === 5 ? 'text-yellow-600' :
-          cell.neighborMines === 6 ? 'text-pink-600' :
-          cell.neighborMines === 7 ? 'text-black' : 'text-gray-600'
-        }`}>
+        <span
+          className={`font-bold text-sm ${
+            cell.neighborMines === 1
+              ? "text-blue-600"
+              : cell.neighborMines === 2
+                ? "text-green-600"
+                : cell.neighborMines === 3
+                  ? "text-red-600"
+                  : cell.neighborMines === 4
+                    ? "text-purple-600"
+                    : cell.neighborMines === 5
+                      ? "text-yellow-600"
+                      : cell.neighborMines === 6
+                        ? "text-pink-600"
+                        : cell.neighborMines === 7
+                          ? "text-black"
+                          : "text-gray-600"
+          }`}
+        >
           {cell.neighborMines}
         </span>
       );
     }
-    
+
     return null;
   };
 
   const getCellClassName = (cell) => {
-    let baseClass = "w-8 h-8 border border-gray-400 flex items-center justify-center text-xs font-bold transition-all duration-200 hover:scale-105 ";
-    
+    let baseClass =
+      "w-8 h-8 border border-gray-400 flex items-center justify-center text-xs font-bold transition-all duration-200 hover:scale-105 ";
+
     if (cell.isRevealed) {
       if (cell.isMine) {
         baseClass += "bg-red-500 hover:bg-red-600";
@@ -211,9 +235,10 @@ const Minesweeper = () => {
         baseClass += "bg-gray-200 dark:bg-gray-600";
       }
     } else {
-      baseClass += "bg-gray-300 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer";
+      baseClass +=
+        "bg-gray-300 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer";
     }
-    
+
     return baseClass;
   };
 
@@ -236,7 +261,7 @@ const Minesweeper = () => {
             <Flag className="h-5 w-5 text-red-500" />
             <span className="font-bold text-lg">{flagCount}</span>
           </div>
-          
+
           <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 px-4 py-2 rounded-lg shadow-md">
             <Clock className="h-5 w-5 text-blue-500" />
             <span className="font-bold text-lg">{time}s</span>
@@ -252,12 +277,14 @@ const Minesweeper = () => {
         </div>
 
         {/* Game Status */}
-        {gameStatus !== 'playing' && (
+        {gameStatus !== "playing" && (
           <div className="text-center mb-8">
-            <div className={`inline-flex items-center space-x-2 px-6 py-3 rounded-full text-white font-bold text-lg ${
-              gameStatus === 'won' ? 'bg-green-500' : 'bg-red-500'
-            }`}>
-              {gameStatus === 'won' ? (
+            <div
+              className={`inline-flex items-center space-x-2 px-6 py-3 rounded-full text-white font-bold text-lg ${
+                gameStatus === "won" ? "bg-green-500" : "bg-red-500"
+              }`}
+            >
+              {gameStatus === "won" ? (
                 <>
                   <Trophy className="h-6 w-6" />
                   <span>You Won!</span>
@@ -275,7 +302,7 @@ const Minesweeper = () => {
         {/* Game Grid */}
         <div className="flex justify-center">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-2xl">
-            <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)` }}>
+            <div className="grid gap-1 minesweeper-grid">
               {grid.map((row, rowIndex) =>
                 row.map((cell, colIndex) => (
                   <button
@@ -283,14 +310,14 @@ const Minesweeper = () => {
                     className={getCellClassName(cell)}
                     onClick={() => revealCell(rowIndex, colIndex)}
                     onContextMenu={(e) => toggleFlag(e, rowIndex, colIndex)}
-                    disabled={gameStatus !== 'playing'}
+                    disabled={gameStatus !== "playing"}
                   >
                     {getCellContent(cell)}
                   </button>
-                ))
+                )),
               )}
             </div>
-            
+
             <div className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
               Left click to reveal • Right click to flag
             </div>

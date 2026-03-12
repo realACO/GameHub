@@ -1,0 +1,11 @@
+{
+  "name": "gamehub",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm start --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "test": "npm test --prefix frontend",
+    "install": "npm install --prefix frontend"
+  }
+}

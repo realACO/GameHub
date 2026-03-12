@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { RotateCcw, Trophy, Bird, Play, Pause } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { RotateCcw, Trophy, Bird, Play, Pause } from "lucide-react";
+import "./FlappyBird.css";
 
 const GAME_HEIGHT = 600;
 const GAME_WIDTH = 400;
@@ -13,13 +14,13 @@ const PIPE_SPEED = 3;
 const FlappyBird = () => {
   const [bird, setBird] = useState({ y: GAME_HEIGHT / 2, velocity: 0 });
   const [pipes, setPipes] = useState([]);
-  const [gameStatus, setGameStatus] = useState('ready'); // ready, playing, gameOver
+  const [gameStatus, setGameStatus] = useState("ready"); // ready, playing, gameOver
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(() => {
-    const saved = localStorage.getItem('flappyBirdHighScore');
+    const saved = localStorage.getItem("flappyBirdHighScore");
     return saved ? parseInt(saved) : 0;
   });
-  
+
   const gameLoopRef = useRef();
   const pipeIdRef = useRef(0);
 
@@ -30,7 +31,7 @@ const FlappyBird = () => {
       x: GAME_WIDTH,
       topHeight: pipeHeight,
       bottomY: pipeHeight + PIPE_GAP,
-      passed: false
+      passed: false,
     };
   }, []);
 
@@ -38,17 +39,17 @@ const FlappyBird = () => {
     setBird({ y: GAME_HEIGHT / 2, velocity: 0 });
     setPipes([]);
     setScore(0);
-    setGameStatus('ready');
+    setGameStatus("ready");
     pipeIdRef.current = 0;
   };
 
   const jump = useCallback(() => {
-    if (gameStatus === 'ready') {
-      setGameStatus('playing');
+    if (gameStatus === "ready") {
+      setGameStatus("playing");
     }
-    
-    if (gameStatus !== 'gameOver') {
-      setBird(prev => ({ ...prev, velocity: JUMP_FORCE }));
+
+    if (gameStatus !== "gameOver") {
+      setBird((prev) => ({ ...prev, velocity: JUMP_FORCE }));
     }
   }, [gameStatus]);
 
@@ -73,39 +74,42 @@ const FlappyBird = () => {
   }, []);
 
   const gameLoop = useCallback(() => {
-    if (gameStatus !== 'playing') return;
+    if (gameStatus !== "playing") return;
 
-    setBird(prev => {
+    setBird((prev) => {
       const newVelocity = prev.velocity + GRAVITY;
       const newY = prev.y + newVelocity;
       return { y: newY, velocity: newVelocity };
     });
 
-    setPipes(prev => {
-      let newPipes = prev.map(pipe => ({ ...pipe, x: pipe.x - PIPE_SPEED }));
-      
+    setPipes((prev) => {
+      let newPipes = prev.map((pipe) => ({ ...pipe, x: pipe.x - PIPE_SPEED }));
+
       // Remove pipes that are off screen
-      newPipes = newPipes.filter(pipe => pipe.x + PIPE_WIDTH > -100);
-      
+      newPipes = newPipes.filter((pipe) => pipe.x + PIPE_WIDTH > -100);
+
       // Add new pipe if needed
-      if (newPipes.length === 0 || newPipes[newPipes.length - 1].x < GAME_WIDTH - 200) {
+      if (
+        newPipes.length === 0 ||
+        newPipes[newPipes.length - 1].x < GAME_WIDTH - 200
+      ) {
         newPipes.push(createPipe());
       }
-      
+
       // Check for score updates
       let newScore = score;
-      newPipes.forEach(pipe => {
+      newPipes.forEach((pipe) => {
         if (!pipe.passed && pipe.x + PIPE_WIDTH < 50) {
           pipe.passed = true;
           newScore++;
         }
       });
-      
+
       if (newScore !== score) {
         setScore(newScore);
         if (newScore > highScore) {
           setHighScore(newScore);
-          localStorage.setItem('flappyBirdHighScore', newScore.toString());
+          localStorage.setItem("flappyBirdHighScore", newScore.toString());
         }
       }
 
@@ -115,17 +119,17 @@ const FlappyBird = () => {
 
   // Check collision
   useEffect(() => {
-    if (gameStatus === 'playing') {
+    if (gameStatus === "playing") {
       const collision = checkCollision(bird.y, pipes);
       if (collision) {
-        setGameStatus('gameOver');
+        setGameStatus("gameOver");
       }
     }
   }, [bird.y, pipes, gameStatus, checkCollision]);
 
   // Game loop
   useEffect(() => {
-    if (gameStatus === 'playing') {
+    if (gameStatus === "playing") {
       gameLoopRef.current = setInterval(gameLoop, 1000 / 60); // 60 FPS
     } else {
       clearInterval(gameLoopRef.current);
@@ -137,14 +141,14 @@ const FlappyBird = () => {
   // Handle keyboard input
   useEffect(() => {
     const handleKeyPress = (e) => {
-      if (e.code === 'Space' || e.key === 'ArrowUp') {
+      if (e.key.toLowerCase() === "w") {
         e.preventDefault();
         jump();
       }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
   }, [jump]);
 
   const renderPipe = (pipe) => (
@@ -190,14 +194,20 @@ const FlappyBird = () => {
           <div className="bg-white dark:bg-gray-800 px-6 py-3 rounded-lg shadow-md">
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-600">{score}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Score</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                Score
+              </div>
             </div>
           </div>
-          
+
           <div className="bg-white dark:bg-gray-800 px-6 py-3 rounded-lg shadow-md">
             <div className="text-center">
-              <div className="text-2xl font-bold text-yellow-600">{highScore}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Best</div>
+              <div className="text-2xl font-bold text-yellow-600">
+                {highScore}
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                Best
+              </div>
             </div>
           </div>
 
@@ -211,16 +221,16 @@ const FlappyBird = () => {
         </div>
 
         {/* Game Status */}
-        {gameStatus === 'ready' && (
+        {gameStatus === "ready" && (
           <div className="text-center mb-8">
             <div className="bg-blue-500 text-white px-6 py-3 rounded-full font-bold text-lg inline-flex items-center space-x-2">
               <Play className="h-6 w-6" />
-              <span>Press SPACE or Click to Start!</span>
+              <span>Press W or Click to Start!</span>
             </div>
           </div>
         )}
 
-        {gameStatus === 'gameOver' && (
+        {gameStatus === "gameOver" && (
           <div className="text-center mb-8">
             <div className="bg-red-500 text-white px-6 py-3 rounded-full font-bold text-lg inline-flex items-center space-x-2">
               <Trophy className="h-6 w-6" />
@@ -233,8 +243,7 @@ const FlappyBird = () => {
         <div className="flex justify-center mb-8">
           <div className="relative bg-gradient-to-b from-sky-200 to-green-200 border-4 border-gray-800 rounded-lg overflow-hidden shadow-2xl">
             <div
-              className="relative cursor-pointer"
-              style={{ width: GAME_WIDTH, height: GAME_HEIGHT }}
+              className="flappy-game-area relative cursor-pointer"
               onClick={jump}
             >
               {/* Background elements */}
@@ -243,7 +252,7 @@ const FlappyBird = () => {
                 <div className="absolute top-10 left-10 w-16 h-8 bg-white rounded-full opacity-70"></div>
                 <div className="absolute top-20 right-20 w-20 h-10 bg-white rounded-full opacity-60"></div>
                 <div className="absolute top-32 left-32 w-12 h-6 bg-white rounded-full opacity-80"></div>
-                
+
                 {/* Ground */}
                 <div className="absolute bottom-0 left-0 right-0 h-20 bg-green-400 border-t-4 border-green-600"></div>
               </div>
@@ -282,9 +291,11 @@ const FlappyBird = () => {
         {/* Instructions */}
         <div className="text-center">
           <div className="inline-block bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg max-w-md">
-            <h3 className="font-bold mb-4 text-gray-800 dark:text-gray-200">How to Play</h3>
+            <h3 className="font-bold mb-4 text-gray-800 dark:text-gray-200">
+              How to Play
+            </h3>
             <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-2 text-left">
-              <li>• Press SPACE or click to make the bird fly</li>
+              <li>• Press W or click to make the bird fly</li>
               <li>• Avoid hitting the pipes or ground</li>
               <li>• Each pipe you pass gives you 1 point</li>
               <li>• Try to beat your high score!</li>

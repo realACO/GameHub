@@ -1,0 +1,5 @@
+.snake-grid {
+  grid-template-columns: repeat(20, 1fr);
+  width: 400px;
+  height: 400px;
+}
