@@ -1,13 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  RotateCcw,
-  Trophy,
-  Zap,
-  ArrowUp,
-  ArrowDown,
-  ArrowLeft,
-  ArrowRight,
-} from "lucide-react";
+import { RotateCcw, Trophy, Zap } from "lucide-react";
 
 const GRID_SIZE = 20;
 const INITIAL_SNAKE = [{ x: 10, y: 10 }];
@@ -99,20 +91,25 @@ const Snake = () => {
 
   useEffect(() => {
     const handleKeyPress = (e) => {
+      const key = e.key.toLowerCase();
       const blockedKeys = [
-        "ArrowUp",
-        "ArrowDown",
-        "ArrowLeft",
-        "ArrowRight",
-        "PageUp",
-        "PageDown",
-        "Home",
-        "End",
+        "arrowup",
+        "arrowdown",
+        "arrowleft",
+        "arrowright",
+        "w",
+        "a",
+        "s",
+        "d",
+        "pageup",
+        "pagedown",
+        "home",
+        "end",
         " ",
-        "Enter",
+        "enter",
       ];
       if (
-        blockedKeys.includes(e.key) ||
+        blockedKeys.includes(key) ||
         e.code === "Space" ||
         e.code === "NumpadEnter"
       ) {
@@ -120,7 +117,7 @@ const Snake = () => {
       }
 
       if (gameStatus === "paused") {
-        if (e.key === "Enter" || e.code === "NumpadEnter") {
+        if (key === "enter" || e.code === "NumpadEnter") {
           startGame();
           return;
         }
@@ -128,17 +125,21 @@ const Snake = () => {
 
       if (gameStatus !== "playing") return;
 
-      switch (e.key) {
-        case "ArrowUp":
+      switch (key) {
+        case "arrowup":
+        case "w":
           if (direction.y === 0) setDirection({ x: 0, y: -1 });
           break;
-        case "ArrowDown":
+        case "arrowdown":
+        case "s":
           if (direction.y === 0) setDirection({ x: 0, y: 1 });
           break;
-        case "ArrowLeft":
+        case "arrowleft":
+        case "a":
           if (direction.x === 0) setDirection({ x: -1, y: 0 });
           break;
-        case "ArrowRight":
+        case "arrowright":
+        case "d":
           if (direction.x === 0) setDirection({ x: 1, y: 0 });
           break;
         default:
@@ -263,21 +264,21 @@ const Snake = () => {
             <div className="grid grid-cols-3 gap-2 max-w-48 mx-auto">
               <div></div>
               <button className="p-3 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
-                <ArrowUp className="h-4 w-4 mx-auto" />
+                W
               </button>
               <div></div>
               <button className="p-3 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
-                <ArrowLeft className="h-4 w-4 mx-auto" />
+                A
               </button>
               <button className="p-3 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
-                <ArrowDown className="h-4 w-4 mx-auto" />
+                S
               </button>
               <button className="p-3 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
-                <ArrowRight className="h-4 w-4 mx-auto" />
+                D
               </button>
             </div>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
-              Use arrow keys to control the snake
+              Use WASD keys to control the snake
             </p>
           </div>
         </div>

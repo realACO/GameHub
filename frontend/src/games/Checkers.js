@@ -173,7 +173,7 @@ const Checkers = () => {
     } else {
       // End turn
       setSelectedSquare(null);
-      setCurrentPlayer(currentPlayer === "red" ? "black" : "red");
+      setCurrentPlayer((prev) => (prev === "red" ? "black" : "red"));
       setMustCapture(false);
 
       // Check for win conditions
