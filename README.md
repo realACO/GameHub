@@ -99,6 +99,37 @@ Run from project root:
 
 This app can be deployed as a static frontend build (for example on Vercel, Netlify, or GitHub Pages).
 
+### Vercel (Recommended)
+
+This repository includes a root `vercel.json` configured for the current project layout:
+
+- Install command: `npm --prefix frontend install`
+- Build command: `npm run build`
+- Output directory: `frontend/build`
+- SPA rewrite to `index.html` for React Router routes
+
+#### Deploy from Vercel Dashboard
+
+1. Push your latest code to GitHub.
+2. In Vercel, click **Add New Project** and import this repository.
+3. Keep the project root as repository root (do not set `frontend` as root).
+4. Vercel should automatically use values from `vercel.json`.
+5. Click **Deploy**.
+
+#### Deploy with Vercel CLI
+
+```bash
+npm i -g vercel
+vercel
+vercel --prod
+```
+
+#### If you still see `craco: command not found`
+
+- Ensure **Install Command** is not set to `npm start`.
+- Use `npm --prefix frontend install` as install command.
+- Re-run deployment after updating project settings.
+
 ## 🤝 Contributing
 
 Contributions are welcome through issues and pull requests.
