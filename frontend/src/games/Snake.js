@@ -1,6 +1,18 @@
 import React, { useState, useEffect, useCallback } from "react";
+<<<<<<< HEAD
 import { RotateCcw, Trophy, Zap } from "lucide-react";
 import "./Snake.css";
+=======
+import {
+  RotateCcw,
+  Trophy,
+  Zap,
+  ArrowUp,
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+} from "lucide-react";
+>>>>>>> 5ba5d7a24af347ce938db3c693acb141f5a12858
 
 const GRID_SIZE = 20;
 const INITIAL_SNAKE = [{ x: 10, y: 10 }];
@@ -92,6 +104,7 @@ const Snake = () => {
 
   useEffect(() => {
     const handleKeyPress = (e) => {
+<<<<<<< HEAD
       const key = e.key.toLowerCase();
 
       if (gameStatus === "paused") {
@@ -109,10 +122,35 @@ const Snake = () => {
           if (key === "a") setDirection({ x: -1, y: 0 });
           if (key === "d") setDirection({ x: 1, y: 0 });
 
+=======
+      const blockedKeys = [
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight",
+        "PageUp",
+        "PageDown",
+        "Home",
+        "End",
+        " ",
+        "Enter",
+      ];
+      if (
+        blockedKeys.includes(e.key) ||
+        e.code === "Space" ||
+        e.code === "NumpadEnter"
+      ) {
+        e.preventDefault();
+      }
+
+      if (gameStatus === "paused") {
+        if (e.key === "Enter" || e.code === "NumpadEnter") {
+>>>>>>> 5ba5d7a24af347ce938db3c693acb141f5a12858
           startGame();
           return;
         }
       }
+<<<<<<< HEAD
 
       if (gameStatus !== "playing") return;
 
@@ -131,6 +169,22 @@ const Snake = () => {
           break;
         case "d":
           e.preventDefault();
+=======
+
+      if (gameStatus !== "playing") return;
+
+      switch (e.key) {
+        case "ArrowUp":
+          if (direction.y === 0) setDirection({ x: 0, y: -1 });
+          break;
+        case "ArrowDown":
+          if (direction.y === 0) setDirection({ x: 0, y: 1 });
+          break;
+        case "ArrowLeft":
+          if (direction.x === 0) setDirection({ x: -1, y: 0 });
+          break;
+        case "ArrowRight":
+>>>>>>> 5ba5d7a24af347ce938db3c693acb141f5a12858
           if (direction.x === 0) setDirection({ x: 1, y: 0 });
           break;
         default:
@@ -138,8 +192,15 @@ const Snake = () => {
       }
     };
 
+<<<<<<< HEAD
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
+=======
+    const listenerOptions = { capture: true, passive: false };
+    window.addEventListener("keydown", handleKeyPress, listenerOptions);
+    return () =>
+      window.removeEventListener("keydown", handleKeyPress, listenerOptions);
+>>>>>>> 5ba5d7a24af347ce938db3c693acb141f5a12858
   }, [direction, gameStatus]);
 
   const getCellContent = (x, y) => {
@@ -151,8 +212,8 @@ const Snake = () => {
 
     if (isSnakeHead) {
       return (
-        <div className="w-full h-full bg-green-600 rounded-sm flex items-center justify-center">
-          <div className="w-1 h-1 bg-white rounded-full"></div>
+        <div className="w-[82%] h-[82%] bg-green-600 rounded-sm flex items-center justify-center">
+          <div className="w-0.5 h-0.5 bg-white rounded-full"></div>
         </div>
       );
     }
@@ -203,7 +264,11 @@ const Snake = () => {
         {gameStatus === "paused" && (
           <div className="text-center mb-8">
             <div className="bg-blue-500 text-white px-6 py-3 rounded-full font-bold text-lg inline-block">
+<<<<<<< HEAD
               Press Enter or W/A/S/D to Start
+=======
+              Press ENTER to Start
+>>>>>>> 5ba5d7a24af347ce938db3c693acb141f5a12858
             </div>
           </div>
         )}
@@ -220,7 +285,18 @@ const Snake = () => {
         {/* Game Grid */}
         <div className="flex justify-center mb-8">
           <div className="bg-gray-900 p-4 rounded-2xl shadow-2xl">
+<<<<<<< HEAD
             <div className="grid gap-px bg-gray-700 snake-grid">
+=======
+            <div
+              className="grid gap-px bg-gray-700"
+              style={{
+                gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`,
+                width: "400px",
+                height: "400px",
+              }}
+            >
+>>>>>>> 5ba5d7a24af347ce938db3c693acb141f5a12858
               {Array.from({ length: GRID_SIZE * GRID_SIZE }).map((_, index) => {
                 const x = index % GRID_SIZE;
                 const y = Math.floor(index / GRID_SIZE);

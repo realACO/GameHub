@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "gamehub",
   "version": "1.0.0",
   "private": true,
@@ -7,5 +8,23 @@
     "build": "npm run build --prefix frontend",
     "test": "npm test --prefix frontend",
     "install": "npm install --prefix frontend"
+=======
+  "name": "gamehub-root",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npm --prefix frontend start",
+    "build": "npm run frontend:build && npm run backend:build",
+    "build:all": "npm run build",
+    "build:frontend": "npm run frontend:build",
+    "build:backend": "npm run backend:build",
+    "test": "npm --prefix frontend run test -- --watchAll=false --passWithNoTests",
+    "frontend:start": "npm --prefix frontend start",
+    "frontend:build": "npm --prefix frontend run build",
+    "frontend:test": "npm --prefix frontend run test -- --watchAll=false --passWithNoTests",
+    "backend:build": "python -m compileall backend",
+    "backend:install": "python -m pip install -r backend/requirements.txt",
+    "backend:start": "uvicorn backend.server:app --reload --host 0.0.0.0 --port 8000"
+>>>>>>> 5ba5d7a24af347ce938db3c693acb141f5a12858
   }
 }
