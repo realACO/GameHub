@@ -15,9 +15,13 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 # MongoDB connection
-mongo_url = os.environ['MONGO_URL']
+mongo_url = os.getenv("MONGO_URL")
+db_name = os.getenv("DB_NAME")
+if not mongo_url or not db_name:
+    raise RuntimeError("Missing required environment variables: MONGO_URL and DB_NAME")
+
 client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+db = client[db_name]
 
 # Create the main app without a prefix
 app = FastAPI()
